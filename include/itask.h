@@ -20,8 +20,10 @@
 class ITask {
 public:
     virtual ~ITask() = default;
-    virtual void execute( void );
+    virtual void execute( void ) = 0;
 };
+
+typedef ITask*  ITaskPtr;
 
 #endif /* ndef __ITASK_H__ */
 /* EOF */
