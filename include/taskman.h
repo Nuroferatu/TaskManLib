@@ -14,13 +14,24 @@
 #ifndef __TASKMAN_H__
 #define __TASKMAN_H__
 
+#include "itask.h"
+
 // ---------------------------------------------------------------------------
 // TaskMan
 // ---------------------------------------------------------------------------
 class TaskMan {
+    volatile bool   running;
+
 public:
+    TaskMan();
+    ~TaskMan();
+
     void onInit( int workersCount );
     void onShutdown( void );
+
+    volatile bool isRunning( void ) const;
+
+    void addTask( ITask* task );
 };
 
 #endif /* ndef __TASKMAN_H__ */

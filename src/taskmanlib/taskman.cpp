@@ -12,14 +12,27 @@
 // ---------------------------------------------------------------------------
 #include "taskman.h"
 
+#include <assert.h>
 #include <iostream>
 
 using namespace std;
 
 // ---------------------------------------------------------------------------
+// Constructor / Destructor
+// ---------------------------------------------------------------------------
+TaskMan::TaskMan() {
+    running = false;
+}
+
+TaskMan::~TaskMan() {
+    assert( !running );
+}
+
+// ---------------------------------------------------------------------------
 // onInit
 // ---------------------------------------------------------------------------
 void TaskMan::onInit( int workersCount ) {
+    running = true;
     cout << "TaskMan::onInit with " << workersCount << " working threads" << endl;
 }
 
@@ -28,6 +41,16 @@ void TaskMan::onInit( int workersCount ) {
 // ---------------------------------------------------------------------------
 void TaskMan::onShutdown( void ) {
     cout << "TaskMan::onShutdown" << endl;
+    running = false;
+}
+
+// ---------------------------------------------------------------------------
+// addTask
+// ---------------------------------------------------------------------------
+void TaskMan::addTask( ITask* task ) {
+    assert( task != nullptr );
+    if ( task )
+        task->execute();
 }
 
 /* EOF */
