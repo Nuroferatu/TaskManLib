@@ -19,6 +19,9 @@
     <ClCompile Include="..\..\src\taskmanlib\asynctaskqueue.cpp" />
     <ClCompile Include="..\..\src\taskmanlib\taskman.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\README.md" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED23E411-5FD7-4AE9-BCD0-CE35481C538C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
