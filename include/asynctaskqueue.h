@@ -4,43 +4,33 @@
 // .------------------------------ooO(_ /\ _)Ooo-----------------------------.
 // |                                  |====|                                 |
 // |                                  '-..-'                                 |
-// | Desc:     TaskMan - Async Task Manager                                  |
+// | Desc:     AsyncTaskQueue - Thread safe queue of tasks to execute        |
 // | By:       Nuroferatu - https://github.com/Nuroferatu                    |
 // '-------------------------------------------------------------------------'
 // ----= Change log =---------------------------------------------------------
-//   1. 2017.11.22, 19:10    [+] Initial
+//   1. 2017.11.23, 10:30    [+] Initial
 // ---------------------------------------------------------------------------
 #pragma once
-#ifndef __TASKMAN_H__
-#define __TASKMAN_H__
+#ifndef __ASYNCTASKQUEUE_H__
+#define __ASYNCTASKQUEUE_H__
 
-#include "asynctaskqueue.h"
-#include <list>
-#include <thread>
+#include "itask.h"
+#include <deque>
 
 // ---------------------------------------------------------------------------
-// TaskMan
+// AsyncTaskQueue
 // ---------------------------------------------------------------------------
-class TaskMan {
+class AsyncTaskQueue {
 public:
-    TaskMan();
-    ~TaskMan();
+    AsyncTaskQueue();
+    ~AsyncTaskQueue();
 
-    void onInit( int workersCount );
-    void onShutdown( void );
-
-    void addTask( ITask* task );
-    void addTask( int i );
-    volatile bool isRunning( void ) const { return running; }
+    int     get( void );
+    void    put( int i );
 
 protected:
-    int getTask( void );
-    static void threadWorker( TaskMan* taskMan, int delay );
-
-    volatile bool   running;
-    AsyncTaskQueue  taskQueue;
-    std::list<std::thread*> threadList;
+    std::deque<int> taskQueue;
 };
 
-#endif /* ndef __TASKMAN_H__ */
+#endif /* ndef __ASYNCTASKQUEUE_H__ */
 /* EOF */

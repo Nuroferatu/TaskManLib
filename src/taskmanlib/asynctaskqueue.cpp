@@ -4,43 +4,39 @@
 // .------------------------------ooO(_ /\ _)Ooo-----------------------------.
 // |                                  |====|                                 |
 // |                                  '-..-'                                 |
-// | Desc:     TaskMan - Async Task Manager                                  |
+// | Desc:     AsyncTaskQueue - Thread safe queue of tasks to execute        |
 // | By:       Nuroferatu - https://github.com/Nuroferatu                    |
 // '-------------------------------------------------------------------------'
 // ----= Change log =---------------------------------------------------------
-//   1. 2017.11.22, 19:10    [+] Initial
+//   1. 2017.11.23, 10:30    [+] Initial
 // ---------------------------------------------------------------------------
-#pragma once
-#ifndef __TASKMAN_H__
-#define __TASKMAN_H__
-
 #include "asynctaskqueue.h"
-#include <list>
-#include <thread>
 
 // ---------------------------------------------------------------------------
-// TaskMan
+// AsyncTaskQueue
 // ---------------------------------------------------------------------------
-class TaskMan {
-public:
-    TaskMan();
-    ~TaskMan();
+AsyncTaskQueue::AsyncTaskQueue() {
+}
 
-    void onInit( int workersCount );
-    void onShutdown( void );
+AsyncTaskQueue::~AsyncTaskQueue() {
+}
 
-    void addTask( ITask* task );
-    void addTask( int i );
-    volatile bool isRunning( void ) const { return running; }
+// ---------------------------------------------------------------------------
+// getTask
+// ---------------------------------------------------------------------------
+int AsyncTaskQueue::get( void ) {
+    if (taskQueue.size() == 0 )
+        return 0;
+    int v = taskQueue.front();
+    taskQueue.pop_front();
+    return v;
+}
 
-protected:
-    int getTask( void );
-    static void threadWorker( TaskMan* taskMan, int delay );
+// ---------------------------------------------------------------------------
+// put
+// ---------------------------------------------------------------------------
+void AsyncTaskQueue::put( int i ) {
+    taskQueue.push_back( i );
+}
 
-    volatile bool   running;
-    AsyncTaskQueue  taskQueue;
-    std::list<std::thread*> threadList;
-};
-
-#endif /* ndef __TASKMAN_H__ */
 /* EOF */

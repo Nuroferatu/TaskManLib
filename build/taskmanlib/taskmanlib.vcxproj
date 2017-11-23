@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\asynctaskqueue.h" />
     <ClInclude Include="..\..\include\itask.h" />
     <ClInclude Include="..\..\include\taskman.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\taskmanlib\asynctaskqueue.cpp" />
     <ClCompile Include="..\..\src\taskmanlib\taskman.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
