@@ -32,7 +32,15 @@ TaskMan::~TaskMan() {
 // onInit
 // ---------------------------------------------------------------------------
 void TaskMan::onInit( int workersCount ) {
+    if (workersCount < 1)
+        workersCount = 1;
+
     running = true;
+
+    for (int i = 0; i < workersCount; ++i) {
+        std::thread* th = new std::thread( TaskMan::threadWorker, this );
+        threadList.push_back( th );
+    }
     cout << "TaskMan::onInit with " << workersCount << " working threads" << endl;
 }
 
@@ -49,8 +57,18 @@ void TaskMan::onShutdown( void ) {
 // ---------------------------------------------------------------------------
 void TaskMan::addTask( ITask* task ) {
     assert( task != nullptr );
-    if ( task )
+    if (task)
         task->execute();
+}
+
+// ---------------------------------------------------------------------------
+// workerTask
+// ---------------------------------------------------------------------------
+void TaskMan::threadWorker( TaskMan* taskMan ) {
+    assert( taskMan != nullptr );
+    if (!taskMan)
+        return;
+    cout << "Worker started: " << std::this_thread::get_id() << endl;
 }
 
 /* EOF */
