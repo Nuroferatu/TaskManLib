@@ -34,7 +34,7 @@ public:
 
 protected:
     ITaskPtr    getTask( void );
-    static void threadWorker( TaskMan* taskMan, int delay );
+    static void threadWorker( TaskMan* taskMan );
 
     volatile bool   running;
     AsyncTaskQueue  taskQueue;

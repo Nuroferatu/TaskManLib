@@ -37,9 +37,8 @@ void TaskMan::onInit( int workersCount ) {
         workersCount = 1;
 
     running = true;
-
     for (int i = 0; i < workersCount; ++i) {
-        std::thread* th = new std::thread( TaskMan::threadWorker, this, (100*i)+100 );
+        std::thread* th = new std::thread( TaskMan::threadWorker, this );
         threadList.push_back( th );
     }
     cout << "TaskMan::onInit with " << workersCount << " working threads" << endl;
@@ -76,18 +75,13 @@ ITaskPtr TaskMan::getTask( void ) {
 // ---------------------------------------------------------------------------
 // workerTask
 // --------------------------------------------------------------= STATIC =---
-void TaskMan::threadWorker( TaskMan* taskMan, int delay ) {
+void TaskMan::threadWorker( TaskMan* taskMan ) {
     assert( taskMan != nullptr );
-
-    cout << "Worker started: " << std::this_thread::get_id() << endl;
     while (taskMan->isRunning()) {
-        cout << "Worker [" << std::this_thread::get_id() << "] geting task";
         ITaskPtr task = taskMan->getTask();
         if (task)
             task->execute();
-        Sleep( delay );
     }
-    cout << "Worker " << std::this_thread::get_id() << " stoped" << endl;
 }
 
 /* EOF */

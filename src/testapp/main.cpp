@@ -11,8 +11,8 @@ public:
     SampleTask( int i ) : id(i) {}
 
     virtual void execute( void ) {
-        cout << "execute SampleTask very long task for id " << id << " by worker " << std::this_thread::get_id() << endl;
         Sleep( (id * 20) );
+        cout << "execute SampleTask very long task for id " << id << " by worker " << std::this_thread::get_id() << endl;
     }
 };
 
