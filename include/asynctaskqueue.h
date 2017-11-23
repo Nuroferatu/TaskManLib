@@ -27,9 +27,9 @@ public:
     AsyncTaskQueue();
     ~AsyncTaskQueue();
 
-    int     get( void );
-    void    put( int i );
-    void    terminate( void );
+    ITaskPtr    get( void );
+    void        put( ITaskPtr task );
+    void        terminate( void );
 
 protected:
     volatile bool    running;
@@ -38,7 +38,7 @@ protected:
     std::mutex  mtxDataReady;
     std::mutex  mtxBufferAccess;
 
-    std::deque<int> taskQueue;
+    std::deque<ITaskPtr> taskQueue;
 };
 
 #endif /* ndef __ASYNCTASKQUEUE_H__ */

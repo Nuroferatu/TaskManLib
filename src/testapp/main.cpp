@@ -5,24 +5,26 @@
 using namespace std;
 
 class SampleTask : public ITask {
+    int     id;
+
 public:
+    SampleTask( int i ) : id(i) {}
+
     virtual void execute( void ) {
-        cout << "execute SampleTask" << endl;
+        cout << "execute SampleTask very long task for id " << id << " by worker " << std::this_thread::get_id() << endl;
+        Sleep( (id * 20) );
     }
 };
+
 
 int main() {
     TaskMan     taskManager;
 
-    taskManager.onInit( 2 );
+    taskManager.onInit( 10 );
 
-    SampleTask  st1;
-    taskManager.addTask( &st1 );
-
-    Sleep( 2000 );
-    for (int i = 0; i < 10; i++) {
-        taskManager.addTask( i );
-        Sleep( 1000 );
+    for (int i = 0; i < 100; i++) {
+        taskManager.addTask( new SampleTask( i ) );
+        Sleep( 1 );
     }
 
     Sleep( 10000 );

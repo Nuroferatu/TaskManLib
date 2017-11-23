@@ -30,11 +30,10 @@ public:
     void onShutdown( void );
 
     void addTask( ITask* task );
-    void addTask( int i );
     volatile bool isRunning( void ) const { return running; }
 
 protected:
-    int getTask( void );
+    ITaskPtr    getTask( void );
     static void threadWorker( TaskMan* taskMan, int delay );
 
     volatile bool   running;
