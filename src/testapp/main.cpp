@@ -19,8 +19,11 @@ int main() {
     SampleTask  st1;
     taskManager.addTask( &st1 );
 
-    for ( int i=0; i<100; i++ )
+    Sleep( 2000 );
+    for (int i = 0; i < 10; i++) {
         taskManager.addTask( i );
+        Sleep( 1000 );
+    }
 
     Sleep( 10000 );
     taskManager.onShutdown();

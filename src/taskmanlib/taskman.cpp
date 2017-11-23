@@ -52,6 +52,7 @@ void TaskMan::onShutdown( void ) {
     running = false;
 
     cout << "TaskMan::onShutdown - waiting for threads to finish" << endl;
+    taskQueue.terminate();
     for (auto tq : threadList )
         tq->join();
     cout << "TaskMan::onShutdown - done" << endl;
@@ -85,7 +86,9 @@ void TaskMan::threadWorker( TaskMan* taskMan, int delay ) {
 
     cout << "Worker started: " << std::this_thread::get_id() << endl;
     while (taskMan->isRunning()) {
-        cout << "Worker [" << std::this_thread::get_id() << "] is executing task: " << taskMan->getTask() << endl;
+        cout << "Worker [" << std::this_thread::get_id() << "] geting task";
+        int v = taskMan->getTask();
+        cout << "Worker [" << std::this_thread::get_id() << "] is executing task: " << v << endl;
         Sleep( delay );
     }
     cout << "Worker " << std::this_thread::get_id() << " stoped" << endl;
