@@ -8,6 +8,8 @@
 // | By:       Nuroferatu - https://github.com/Nuroferatu                    |
 // '-------------------------------------------------------------------------'
 // ----= Change log =---------------------------------------------------------
+//   2. 2017.11.24, 11:50    [*] ITask interface changed. TaskMan must support onPreExecute/onPostExecute
+//                           [+] onUpdate - to execute onPre/onPost on TaskMan thread
 //   1. 2017.11.22, 19:10    [+] Initial
 // ---------------------------------------------------------------------------
 #pragma once
@@ -27,6 +29,7 @@ public:
     ~TaskMan();
 
     void onInit( int workersCount );
+    void onUpdate( void );
     void onShutdown( void );
 
     void addTask( ITask* task );
@@ -38,6 +41,11 @@ protected:
 
     volatile bool   running;
     AsyncTaskQueue  taskQueue;
+
+    // Tasks in this queue are executed on TaskMan thread, synchronization for preQueue is a bit overused, but required for postQueue as workers will have access to it.
+    AsyncTaskQueue  preQueue;
+    AsyncTaskQueue  postQueue;
+
     std::list<std::thread*> threadList;
 };
 

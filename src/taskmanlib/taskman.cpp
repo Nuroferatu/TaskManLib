@@ -8,6 +8,8 @@
 // | By:       Nuroferatu - https://github.com/Nuroferatu                    |
 // '-------------------------------------------------------------------------'
 // ----= Change log =---------------------------------------------------------
+//   2. 2017.11.24, 11:50    [*] ITask interface changed. TaskMan must support onPreExecute/onPostExecute
+//                           [+] onUpdate - to execute onPre/onPost on TaskMan thread
 //   1. 2017.11.22, 19:10    [+] Initial
 // ---------------------------------------------------------------------------
 #include "taskman.h"
@@ -45,6 +47,25 @@ void TaskMan::onInit( int workersCount ) {
 }
 
 // ---------------------------------------------------------------------------
+// onUpdate
+// ---------------------------------------------------------------------------
+void TaskMan::onUpdate( void ) {
+    cout << "onUpdate" << endl;
+
+    while (!preQueue.isEmpty()) {
+        ITaskPtr task = preQueue.get();     // Is it possible to get locked here? only if other thread try to use this queue
+        task->onPreExecute();
+        taskQueue.put( task );
+    }
+
+    while (!postQueue.isEmpty()) {
+        ITaskPtr task = postQueue.get();     // Is it possible to get locked here? yes, when task is executed and worker is currently updateing queue.
+        task->onPostExecute();
+    }
+
+}
+
+// ---------------------------------------------------------------------------
 // onShutdown
 // ---------------------------------------------------------------------------
 void TaskMan::onShutdown( void ) {
@@ -60,9 +81,9 @@ void TaskMan::onShutdown( void ) {
 // ---------------------------------------------------------------------------
 // addTask
 // ---------------------------------------------------------------------------
-void TaskMan::addTask( ITask* task ) {
+void TaskMan::addTask( ITaskPtr task ) {
     assert( task != nullptr );
-    taskQueue.put( task );
+    preQueue.put( task );
 }
 
 // ---------------------------------------------------------------------------
@@ -79,8 +100,10 @@ void TaskMan::threadWorker( TaskMan* taskMan ) {
     assert( taskMan != nullptr );
     while (taskMan->isRunning()) {
         ITaskPtr task = taskMan->getTask();
-        if (task)
-            task->execute();
+        if (task) {
+            task->onExecute();
+            taskMan->postQueue.put( task );
+        }
     }
 }
 

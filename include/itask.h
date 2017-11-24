@@ -8,6 +8,8 @@
 // | By:       Nuroferatu - https://github.com/Nuroferatu                    |
 // '-------------------------------------------------------------------------'
 // ----= Change log =---------------------------------------------------------
+//   2. 2017.11.24, 11:50    [*] Interface changed. Added onPreExecute and onPostExecute
+//                               for better control of task lifecycle (executed on TaskMan thread)
 //   1. 2017.11.22, 19:15    [+] Initial
 // ---------------------------------------------------------------------------
 #pragma once
@@ -20,7 +22,9 @@
 class ITask {
 public:
     virtual ~ITask() = default;
-    virtual void execute( void ) = 0;
+    virtual void onPreExecute( void ) = 0;
+    virtual void onExecute( void ) = 0;
+    virtual void onPostExecute( void ) = 0;
 };
 
 typedef ITask*  ITaskPtr;

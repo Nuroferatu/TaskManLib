@@ -10,12 +10,20 @@ class SampleTask : public ITask {
 public:
     SampleTask( int i ) : id(i) {}
 
-    virtual void execute( void ) {
+    virtual void onPreExecute( void ) {
+        cout << "Prepare task to execute for id " << id << " by worker " << std::this_thread::get_id() << endl;
+    }
+
+    virtual void onExecute( void ) {
         Sleep( (id * 20) );
         cout << "execute SampleTask very long task for id " << id << " by worker " << std::this_thread::get_id() << endl;
     }
-};
 
+    virtual void onPostExecute( void ) {
+        cout << "Task is done, terminate for id " << id << " by worker " << std::this_thread::get_id() << endl;
+        delete this;
+    }
+};
 
 int main() {
     TaskMan     taskManager;
@@ -27,7 +35,10 @@ int main() {
         Sleep( 1 );
     }
 
-    Sleep( 10000 );
+    for (int i = 0; i < 100; i++) {
+        taskManager.onUpdate();
+        Sleep( 100 );
+    }
     taskManager.onShutdown();
 }
 

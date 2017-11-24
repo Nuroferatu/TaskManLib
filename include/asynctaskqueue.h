@@ -8,6 +8,7 @@
 // | By:       Nuroferatu - https://github.com/Nuroferatu                    |
 // '-------------------------------------------------------------------------'
 // ----= Change log =---------------------------------------------------------
+//   2. 2017.11.23, 10:30    [+] isEmpty - it's not synchronized! must be used with cautions
 //   1. 2017.11.23, 10:30    [+] Initial
 // ---------------------------------------------------------------------------
 #pragma once
@@ -30,6 +31,7 @@ public:
     ITaskPtr    get( void );
     void        put( ITaskPtr task );
     void        terminate( void );
+    bool        isEmpty(void) const { return (taskQueue.size() == 0); }
 
 protected:
     volatile bool    running;
